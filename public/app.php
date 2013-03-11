@@ -22,7 +22,13 @@
 </head>
 <body>
 <script type="text/javascript" data-usage="bootstrap">
-    rAppid.bootStrap("app/TrackGit.xml");
+    rAppid.bootStrap("app/TrackGit.xml", null, {
+        accessToken: "<?php echo $_SESSION["access_token"]; ?>"
+    }, null, function(err) {
+        if (err) {
+            console.error(err, err.stack);
+        }
+    });
 </script>
 </body>
 </html>

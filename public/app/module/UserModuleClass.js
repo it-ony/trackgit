@@ -33,7 +33,6 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                     err && console.error(err);
                     routeContext.callback(err);
                 });
-
         }
 
     });

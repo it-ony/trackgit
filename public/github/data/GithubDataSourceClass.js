@@ -48,12 +48,13 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
         },
 
         getPathComponentsForModel: function (model) {
+            var ret = this.callBase();
 
-            if (model.constructor.name === "github.model.User" && model.$.id === "me") {
-                return ["user"];
+            if (ret && ret.length === 2 && model.isUniqueModel) {
+                ret.splice(1, 1);
             }
 
-            return this.callBase();
+            return ret;
         }
     });
 

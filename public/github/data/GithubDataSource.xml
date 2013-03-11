@@ -1,5 +1,6 @@
 <data:GithubDataSourceClass xmlns:data="github.data" xmlns:conf="js.conf">
     <conf:DataSourceConfiguration>
+        <conf:ResourceConfiguration path="user" modelClassName="github.model.Me" />
         <conf:ResourceConfiguration path="users" modelClassName="github.model.User">
             <conf:ResourceConfiguration path="repos" modelClassName="github.model.Repository"/>
         </conf:ResourceConfiguration>

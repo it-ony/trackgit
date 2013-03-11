@@ -20,7 +20,7 @@
                     <a class="brand" href="#">TrackGit</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
-                            <a href="#" class="navbar-link">{me.name}</a>
+                            <a href="#/user/{me.login}" class="navbar-link">{me.name}</a>
                         </p>
                         <ui:MenuButton label="{i18n.t('navigation.repositories')}" class="pull-right filter-button">
                             <div>

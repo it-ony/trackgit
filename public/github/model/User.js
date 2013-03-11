@@ -3,7 +3,6 @@ define(["js/data/Model", "js/data/Collection", "github/model/Repository"], funct
 
         schema: {
             name: String,
-            login: String,
 
             avatar_url: String,
             public_repos: Number,
@@ -12,7 +11,9 @@ define(["js/data/Model", "js/data/Collection", "github/model/Repository"], funct
                 type: Collection.of(Repository),
                 key: "repos_url"
             }
-        }
+        },
+
+        idKey: "login"
 
     });
 });

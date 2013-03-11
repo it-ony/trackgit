@@ -12,7 +12,9 @@ define(["js/data/Model"], function(Model) {
 
             has_issues: Boolean,
             open_issues: Number
-        }
+        },
+
+        idKey: "name"
 
     });
 });

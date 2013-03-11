@@ -1,4 +1,4 @@
-define(["js/core/Model"], function(Model) {
+define(["js/data/Model"], function(Model) {
     return Model.inherit("github.model.Repository", {
 
         schema: {

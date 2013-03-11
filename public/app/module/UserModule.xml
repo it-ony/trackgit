@@ -15,11 +15,11 @@
                 </div>
                 <div class="span3">
                     <div class="avatar">
-                        <img src="{me.avatar_url}&amp;s=175" alt="{me.name}"/>
+                        <img src="{user.avatar_url}&amp;s=175" alt="{user.name}"/>
                     </div>
                     <div>
-                        <div class="name">{me.name}</div>
-                        <div class="blog" visible="{me.blog}">{me.blog}</div>
+                        <div class="name">{user.name}</div>
+                        <div class="blog" visible="{user.blog}">{user.blog}</div>
                     </div>
                 </div>
             </div>

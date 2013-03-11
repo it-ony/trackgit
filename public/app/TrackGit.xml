@@ -32,7 +32,7 @@
             <ui:ContentPlaceHolder name="main"/>
         </div>
 
-        <conf:ModuleConfiguration name="overview" moduleClass="app.module.UserModule" route="^user/[^/]+$"/>
+        <conf:ModuleConfiguration name="overview" moduleClass="app.module.UserModule" route="^user/([^/]+)$"/>
         <!--<conf:ModuleConfiguration name="main" moduleClass="app.module.MainModule" route="^m.*$"/>-->
 
     </js:ModuleLoader>

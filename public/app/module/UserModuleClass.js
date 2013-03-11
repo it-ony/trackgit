@@ -3,7 +3,8 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
     return ModuleBase.inherit("app.module.OverviewClass", {
 
         defaults: {
-            user: null
+            user: null,
+            repos: null
         },
 
         inject: {
@@ -28,6 +29,11 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                 })
                 .seq(function () {
                     self.set("user", this.vars.user);
+                })
+                .seq(function(){
+                    self.$.user.$.repositories.fetch(null, function (err, collection) {
+                        self.set('repos', collection);
+                    });
                 })
                 .exec(function (err) {
                     err && console.error(err);

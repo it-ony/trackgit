@@ -55,6 +55,9 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
             }
 
             return ret;
+        },
+        extractListData: function (list, payload, options) {
+            return payload;
         }
     });
 

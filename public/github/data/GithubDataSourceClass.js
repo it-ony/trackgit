@@ -49,7 +49,7 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
 
         getPathComponentsForModel: function (model) {
 
-            if (model.constructor.name === "github.model.Me") {
+            if (model.constructor.name === "github.model.User" && model.$.id === "me") {
                 return ["user"];
             }
 

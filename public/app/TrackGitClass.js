@@ -1,4 +1,4 @@
-define(["js/core/Application", "flow", "github/model/Me"], function (Application, flow, Me) {
+define(["js/core/Application", "flow", "github/model/User"], function (Application, flow, User) {
 
         return Application.inherit({
 
@@ -17,8 +17,8 @@ define(["js/core/Application", "flow", "github/model/Me"], function (Application
 
                 githubDataSource.set("accessToken", parameter.accessToken);
 
-                me = githubDataSource.createEntity(Me, "me");
-                injection.addInstance(me);
+                me = githubDataSource.createEntity(User, "me");
+                injection.addInstance("me", me);
                 this.set("me", me);
 
                 flow()

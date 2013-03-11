@@ -1,4 +1,4 @@
-<module:OverviewClass xmlns="http://www.w3.org/1999/xhtml"
+<module:UserModuleClass xmlns="http://www.w3.org/1999/xhtml"
                       xmlns:module="app.module" xmlns:js="js.core" xmlns:ui="js.ui">
 
     <js:Content name="header">
@@ -27,4 +27,4 @@
 
     </js:Content>
 
-</module:OverviewClass>
+</module:UserModuleClass>

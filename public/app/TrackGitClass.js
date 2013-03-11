@@ -7,6 +7,10 @@ define(["js/core/Application", "flow", "github/model/Me", "github/model/User", "
                 context: Context
             },
 
+            defaultRoute: function(routeContext) {
+                routeContext.navigate("user/" + this.$.me.$.login);
+            },
+
             start:function (parameter, callback) {
 
                 parameter = parameter || {};

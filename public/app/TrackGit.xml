@@ -8,7 +8,9 @@
         <js:I18n cid="i18n" path="app/locale" locale="en" loadMomentJs="false"/>
     </js:Injection>
 
-    <js:Router cid="router" />
+    <js:Router cid="router">
+        <conf:RouteConfiguration route="^$" onexec="defaultRoute" />
+    </js:Router>
 
     <js:ModuleLoader router="{router}" id="wrapper">
 
@@ -30,7 +32,7 @@
             <ui:ContentPlaceHolder name="main"/>
         </div>
 
-        <conf:ModuleConfiguration name="overview" moduleClass="app.module.Overview" route="^$"/>
+        <conf:ModuleConfiguration name="overview" moduleClass="app.module.UserModule" route="^user/[^/]+$"/>
         <!--<conf:ModuleConfiguration name="main" moduleClass="app.module.MainModule" route="^m.*$"/>-->
 
     </js:ModuleLoader>

@@ -1,4 +1,4 @@
-define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flow"], function(ModuleBase, User, DataSource, flow) {
+define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flow"], function (ModuleBase, User, DataSource, flow) {
 
     return ModuleBase.inherit("app.module.OverviewClass", {
 
@@ -10,33 +10,30 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
             dataSource: DataSource
         },
 
-        start: function(callback, routeContext) {
+        start: function () {
+            this.set("user", null);
+            this.callBase();
+        },
+
+        showUser: function (routeContext, userName) {
 
             var self = this;
 
-            self.set("user", null);
-
             flow()
-                .seq("user", function(cb) {
-
-                    var userName = routeContext.params[0];
-
-                    if (self.$.user && self.$.user.$.login !== userName) {
-                        self.set("user", null);
-                    }
-
+                .seq("user", function (cb) {
                     var user = self.$.dataSource.createEntity(User, userName);
                     user.fetch(null, cb);
 
                     return user;
                 })
-                .seq(function() {
+                .seq(function () {
                     self.set("user", this.vars.user);
                 })
-                .exec(function(err) {
+                .exec(function (err) {
                     err && console.error(err);
-                    callback && callback();
+                    routeContext.callback(err);
                 });
+
         }
 
     });

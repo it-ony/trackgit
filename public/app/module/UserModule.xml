@@ -1,5 +1,9 @@
 <module:UserModuleClass xmlns="http://www.w3.org/1999/xhtml"
-                      xmlns:module="app.module" xmlns:js="js.core" xmlns:ui="js.ui">
+                        xmlns:module="app.module" xmlns:js="js.core" xmlns:ui="js.ui" xmlns:conf="js.conf">
+
+    <js:Router>
+        <conf:RouteConfiguration route="^user/([^/]+)$" onexec="showUser" />
+    </js:Router>
 
     <js:Content name="header">
     </js:Content>

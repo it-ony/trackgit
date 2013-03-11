@@ -5,6 +5,10 @@
     Created with rAppid.js - a declarative RIA MVC JS Framework developed by Tony Findeisen and Marcus Krejpowicz
     Visit http://rappidjs.com for more Information.
     -->
+    <link rel="stylesheet" href="app/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="app/css/trackgit.css" media="all">
+
+    <meta charset="utf-8">
     <title>TrackGit</title>
 
     <!-- VERSION="${VERSION}" -->

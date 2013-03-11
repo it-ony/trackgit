@@ -9,7 +9,7 @@
     </js:Injection>
 
     <js:Router cid="router">
-        <conf:RouteConfiguration route="^$" onexec="defaultRoute" />
+        <conf:RouteConfiguration route="^$" onexec="defaultRoute"/>
     </js:Router>
 
     <js:ModuleLoader router="{router}" id="wrapper">
@@ -22,6 +22,17 @@
                         <p class="navbar-text pull-right">
                             <a href="#" class="navbar-link">{me.name}</a>
                         </p>
+                        <ui:MenuButton label="{i18n.t('navigation.repositories')}" class="pull-right filter-button">
+                            <div>
+                                <ui:ItemsView class="filter-menu"
+                                              items="{me.repositories}" itemKey="repository"
+                                              multiSelect="false" tagName="ul">
+                                    <a href="#/{me.login}/{repository.name}">
+                                        <span>{repository.name}</span>
+                                    </a>
+                                </ui:ItemsView>
+                            </div>
+                        </ui:MenuButton>
                     </div>
                     <ui:ContentPlaceHolder name="header"/>
                 </div>

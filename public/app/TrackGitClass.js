@@ -38,6 +38,11 @@ define(["js/core/Application", "flow", "github/model/Me", "github/model/User", "
                         self.set("me", me);
                         injection.addInstance("me", me);
                     })
+                    .seq(function() {
+                        setTimeout(function() {
+                            me.$.repositories.fetch();
+                        }, 1000);
+                    })
                     .exec(function(err) {
                         if (err) {
                             callback && callback(err);

@@ -1,0 +1,30 @@
+<module:OverviewClass xmlns="http://www.w3.org/1999/xhtml"
+                      xmlns:module="app.module" xmlns:js="js.core" xmlns:ui="js.ui">
+
+    <js:Content name="header">
+    </js:Content>
+
+    <js:Content name="main">
+        <div class="container">
+            <div class="row">
+                <div class="span9">
+                    <h3>Repositories</h3>
+                    <ui:ListView>
+
+                    </ui:ListView>
+                </div>
+                <div class="span3">
+                    <div class="avatar">
+                        <img src="{me.avatar_url}&amp;s=175" alt="{me.name}"/>
+                    </div>
+                    <div>
+                        <div class="name">{me.name}</div>
+                        <div class="blog" visible="{me.blog}">{me.blog}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </js:Content>
+
+</module:OverviewClass>

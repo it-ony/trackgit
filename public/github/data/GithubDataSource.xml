@@ -1,4 +1,4 @@
-<data:GithubDataSourceClass xmlns:data="github.data" xmlns:conf="js.conf">
+<data:GithubDataSourceClass xmlns:data="github.data" xmlns:conf="js.conf" endPoint="https://api.github.com">
     <conf:DataSourceConfiguration>
         <conf:ResourceConfiguration path="user" modelClassName="github.model.Me" />
         <conf:ResourceConfiguration path="users" modelClassName="github.model.User">

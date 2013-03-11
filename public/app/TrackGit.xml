@@ -1,13 +1,38 @@
 <?xml version="1.0"?>
 <app:TrackGitClass xmlns="http://www.w3.org/1999/xhtml"
                    xmlns:js="js.core" xmlns:app="app"
-                   xmlns:githubData="github.data">
+                   xmlns:githubData="github.data" xmlns:conf="js.conf" xmlns:ui="js.ui">
 
     <js:Injection cid="injection">
         <githubData:GithubDataSource cid="githubDataSource" gateway="/api"/>
+        <js:I18n cid="i18n" path="app/locale" locale="en" loadMomentJs="false"/>
     </js:Injection>
 
-    <h1>Hello {me.name}</h1>
-    <img src="{me.avatar_url}" />
+    <js:Router cid="router" />
+
+    <js:ModuleLoader router="{router}" id="wrapper">
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="#">TrackGit</a>
+                    <div class="nav-collapse collapse">
+                        <p class="navbar-text pull-right">
+                            <a href="#" class="navbar-link">{me.name}</a>
+                        </p>
+                    </div>
+                    <ui:ContentPlaceHolder name="header"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <ui:ContentPlaceHolder name="main"/>
+        </div>
+
+        <conf:ModuleConfiguration name="overview" moduleClass="app.module.Overview" route="^$"/>
+        <!--<conf:ModuleConfiguration name="main" moduleClass="app.module.MainModule" route="^m.*$"/>-->
+
+    </js:ModuleLoader>
 
 </app:TrackGitClass>

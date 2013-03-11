@@ -7,7 +7,6 @@ define(["js/core/Application", "flow", "github/model/Me"], function (Application
             },
 
             start:function (parameter, callback) {
-                this.callBase(parameter, false);
 
                 parameter = parameter || {};
 
@@ -20,8 +19,7 @@ define(["js/core/Application", "flow", "github/model/Me"], function (Application
 
                 me = githubDataSource.createEntity(Me, "me");
                 injection.addInstance(me);
-
-                self.set("me", me);
+                this.set("me", me);
 
                 flow()
                     .seq(function(cb) {

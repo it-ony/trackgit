@@ -7,7 +7,7 @@ define(["js/data/Model"], function(Model) {
             full_name: String,
 
             "private": Boolean,
-            fork: false,
+            fork: Boolean,
             html_url: String,
 
             has_issues: Boolean,

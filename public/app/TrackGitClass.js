@@ -1,24 +1,40 @@
-define(
-    ["js/core/Application"],
-    function (Application) {
+define(["js/core/Application", "flow", "github/model/Me"], function (Application, flow, Me) {
 
         return Application.inherit({
-            /**
-             *  initializes the application variables
-             */
-            initialize:function () {
-                this.set('appName','TrackGit');
+
+            defaults: {
+                me: null
             },
-            /***
-             * Starts the application
-             * @param parameter
-             * @param callback
-             */
+
             start:function (parameter, callback) {
-                // false - disables autostart
                 this.callBase(parameter, false);
 
-                callback();
+                parameter = parameter || {};
+
+                var self = this,
+                    injection = this.$.injection,
+                    githubDataSource = this.$.githubDataSource,
+                    me;
+
+                githubDataSource.set("accessToken", parameter.accessToken);
+
+                me = githubDataSource.createEntity(Me, "me");
+                injection.addInstance(me);
+
+                self.set("me", me);
+
+                flow()
+                    .seq(function(cb) {
+                        me.fetch(null, cb);
+                    })
+                    .exec(function(err) {
+                        if (err) {
+                            callback && callback(err);
+                        } else {
+                            self.start.baseImplementation.call(self, parameter, callback);
+                        }
+                    });
+
             }
         });
     }

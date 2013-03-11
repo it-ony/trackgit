@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <app:TrackGitClass xmlns="http://www.w3.org/1999/xhtml"
-               xmlns:js="js.core" xmlns:ui="js.ui" xmlns:app="app">
-    <div class="container">
-        <h1>Congratulations</h1>
-        <p>
-            Your Application "{appName}" is running!
-        </p>
-    </div>
+                   xmlns:js="js.core" xmlns:app="app"
+                   xmlns:githubData="github.data">
+
+    <js:Injection cid="injection">
+        <githubData:GithubDataSource cid="githubDataSource" gateway="/api"/>
+    </js:Injection>
+
+    <h1>Hello {me.name}</h1>
+    <img src="{me.avatar_url}" />
+
 </app:TrackGitClass>

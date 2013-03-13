@@ -3,8 +3,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
     return ModuleBase.inherit("app.module.UserModuleClass", {
 
         defaults: {
-            user: null,
-            repos: null
+            user: null
         },
 
         inject: {
@@ -18,7 +17,8 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
         showUser: function (routeContext, userName) {
 
-            var self = this;
+            var self = this,
+                repositories;
 
             flow()
                 .seq("user", function (cb) {
@@ -27,20 +27,12 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
                     return user;
                 })
-                .seq(function () {
-                    self.set("user", this.vars.user);
-                })
-                .seq(function(){
-                    self.$.user.$.repositories.fetch(null, function (err, collection) {
-                        self.set('repos', collection);
-                        collection.at(7).fetch(null, function(err, repo){
-                            repo.$.issues.fetch(null, function(err, issues){
-                                issues.at(0).fetch(null, function(err, issue){
-                                    console.log(issue);
-                                });
-                            });
-                        });
-                    });
+                .seq(function (cb) {
+                    var user = this.vars.user;
+                    self.set("user", user);
+
+                    repositories = user.$.repositories;
+                    repositories.fetch(null, cb);
                 })
                 .exec(function (err) {
                     err && console.error(err);

@@ -24,8 +24,6 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                 .seq("user", function (cb) {
                     var user = self.$.dataSource.createEntity(User, userName);
                     user.fetch(null, cb);
-
-                    return user;
                 })
                 .seq(function (cb) {
                     var user = this.vars.user;

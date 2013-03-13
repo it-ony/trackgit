@@ -11,18 +11,18 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
             if (_.isString(data) && schemaType.classof(Model)) {
                 return {
                     id: data.split("/").pop(),
-                    href: data
+                    url: data
                 }
             }
 
-            if (schemaType.classof(Collection) && _.isString(data[key])) {
+            var referenceKey = key + "_url";
+            if (schemaType.classof(Collection)) {
                 return {
-                    href: data[key]
+                    url: data[referenceKey]
                 };
             }
 
             if (schemaType.classof(Model)) {
-                var referenceKey = key + "_url";
                 if (data[referenceKey]) {
                     return data[referenceKey];
                 }
@@ -36,7 +36,8 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
     var GithubDataSourceClass = RestDataSource.inherit("github.data.GithubDataSourceClass", {
 
         defaults: {
-            accessToken: null
+            accessToken: null,
+            determinateContextAttribute: false
         },
 
         $defaultProcessorFactory: Processor,
@@ -45,6 +46,31 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
             var params = this.callBase() || {};
             params["access_token"] = this.$.accessToken;
             return params;
+        },
+
+        _getPagingParameterForCollectionPage: function(collectionPage){
+            return {
+                page: collectionPage.$pageIndex + 1,
+                per_page: collectionPage.$limit
+            }
+        },
+
+        _buildUriForResource: function(resource){
+            if (resource.$.url) {
+                var url = resource.$.url;
+
+                url = url.substr(this.$.endPoint.length + 1);
+
+                if(resource instanceof Collection){
+                   url = url.replace(/\{[^}]+\}/,"");
+                } else if(resource instanceof Model){
+                   url = url.replace("{/" + resource.idKey + "}","/"+resource.identifier());
+                }
+
+                return [this.$.gateway,url].join("/");
+            }
+
+            return this.callBase();
         },
 
         getPathComponentsForModel: function (model) {

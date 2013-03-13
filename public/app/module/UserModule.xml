@@ -13,8 +13,8 @@
             <div class="row">
                 <div class="span9">
                     <h3>Repositories</h3>
-                    <ui:ListView items="{repos}" itemKey="repo">
-                        <li>{repo.name}</li>
+                    <ui:ListView items="{repos}" itemKey="repo" tagName="ul">
+                        <a href="#/user/{user.login}/{repo.name}">{repo.name}</a>
                     </ui:ListView>
                 </div>
                 <div class="span3">

@@ -2,7 +2,9 @@
     <conf:DataSourceConfiguration>
         <conf:ResourceConfiguration path="user" modelClassName="github.model.Me" />
         <conf:ResourceConfiguration path="users" modelClassName="github.model.User">
-            <conf:ResourceConfiguration path="repos" modelClassName="github.model.Repository"/>
+            <conf:ResourceConfiguration path="repos" modelClassName="github.model.Repository">
+                <conf:ResourceConfiguration path="issues" modelClassName="github.model.Issue"/>
+            </conf:ResourceConfiguration>
         </conf:ResourceConfiguration>
     </conf:DataSourceConfiguration>
 </data:GithubDataSourceClass>

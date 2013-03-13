@@ -33,6 +33,13 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                 .seq(function(){
                     self.$.user.$.repositories.fetch(null, function (err, collection) {
                         self.set('repos', collection);
+                        collection.at(7).fetch(null, function(err, repo){
+                            repo.$.issues.fetch(null, function(err, issues){
+                                issues.at(0).fetch(null, function(err, issue){
+                                    console.log(issue);
+                                });
+                            });
+                        });
                     });
                 })
                 .exec(function (err) {

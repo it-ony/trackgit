@@ -6,7 +6,7 @@ define(["js/data/Model", "js/data/Collection", "github/model/Issue", "github/mod
             description: String,
             full_name: String,
 
-            owner: "github.model.User",
+//            owner: "github.model.User",
 
             "private": Boolean,
             fork: Boolean,

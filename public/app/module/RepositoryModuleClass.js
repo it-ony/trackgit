@@ -20,10 +20,33 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
             this.callBase();
         },
 
+        _getMileStones: function(state) {
+            state = state || "open";
+
+            var ret = [],
+                mileStones = this.get("repository.mileStones");
+
+            if (mileStones) {
+                for (var i = 0; i < mileStones.$items.length; i++) {
+                    if (mileStones.$items[i].$.state === state) {
+                        ret.push(mileStones.$items[i]);
+                    }
+                }
+            }
+
+            return ret;
+
+        },
+
+        openMileStones: function() {
+            return this._getMileStones("open");
+        }.on(["repository.mileStones", "*"]),
+
         showRepository: function(routerContext, userName, repositoryName) {
 
             var self = this,
-                dataSource = this.$.dataSource;
+                dataSource = this.$.dataSource,
+                runsInBrowser = this.runsInBrowser();
 
             flow()
                 .seq("user", function(cb) {
@@ -39,6 +62,15 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                     self.set("repository", repository);
 
                     repository.fetch(null, cb);
+                })
+                .seq("milestones", function(cb) {
+
+                    if (runsInBrowser) {
+                        cb();
+                        cb = null;
+                    }
+
+                    this.vars.repository.$.mileStones.fetch(null, cb);
                 })
                 .exec(function(err) {
                     err && console.error(err);

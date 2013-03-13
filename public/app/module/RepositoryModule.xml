@@ -3,26 +3,48 @@
                         xmlns:js="js.core" xmlns:ui="js.ui" xmlns:conf="js.conf">
 
     <js:Router>
-        <conf:RouteConfiguration route="^user/([^/]+)/([^/]+)/.*$" onexec="showRepository" />
+        <conf:RouteConfiguration route="^user/([^/]+)/([^/]+).*$" onexec="showRepository" />
     </js:Router>
 
     <js:Content name="header">
+        <div>
+            <h2>
+                <span class="user">{user.login}</span>/<span class="repository">{repository.name}</span>
+            </h2>
+        </div>
     </js:Content>
 
     <js:Content name="main">
         <div class="container-fluid">
             <div class="row">
                 <div class="span3">
+                    <div class="repository-information">
+                        <div class="avatar">
+                            <img src="{user.avatar_url}&amp;s=25" alt="{user.name}"/>
+                        </div>
+                        <a href="#/user/{me.login}" class="user">{user.name}</a>
+                    </div>
+
                     <h3>Milestones</h3>
                     <ul>
                         <li>
                             Backlog
                         </li>
-                        <li>
-
+                        <li class="open-milestones">
+                            <ui:ListView items="{openMileStones()}" itemKey="milestone">
+                                <js:Template name="item">
+                                    <a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">
+                                        {milestone.title}
+                                    </a>
+                                </js:Template>
+                            </ui:ListView>
                         </li>
-                        <li>
-
+                        <li class="closed-milestones">
+                            <!--<ui:ListView items="{closedMileStones}" itemKey="milestone">-->
+                                <!--<a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">-->
+                                    <!--{milestone.title}-->
+                                <!--</a>-->
+                            <!--</ui:ListView>-->
                         </li>
                     </ul>
                 </div>

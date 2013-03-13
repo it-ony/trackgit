@@ -27,7 +27,7 @@
                                 <ui:ListView class="filter-menu"
                                              items="{me.repositories}" itemKey="repository"
                                              multiSelect="false" tagName="ul">
-                                    <a href="#/{me.login}/{repository.name}">
+                                    <a href="#/user/{me.login}/{repository.name}">
                                         <span>{repository.name}</span>
                                     </a>
                                 </ui:ListView>

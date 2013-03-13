@@ -4,6 +4,8 @@
         <conf:ResourceConfiguration path="users" modelClassName="github.model.User">
             <conf:ResourceConfiguration path="repos" modelClassName="github.model.Repository">
                 <conf:ResourceConfiguration path="issues" modelClassName="github.model.Issue"/>
+                <conf:ResourceConfiguration path="milestones" modelClassName="github.model.MileStone"/>
+                <conf:ResourceConfiguration path="labels" modelClassName="github.model.Label"/>
             </conf:ResourceConfiguration>
         </conf:ResourceConfiguration>
     </conf:DataSourceConfiguration>

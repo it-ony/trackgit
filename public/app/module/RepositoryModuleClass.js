@@ -20,10 +20,6 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
             this.callBase();
         },
 
-        defaultRoute: function(routeContext) {
-            routeContext.navigate(routeContext.fragment + "/board");
-        },
-
         showRepository: function(routerContext, userName, repositoryName) {
 
             var self = this,

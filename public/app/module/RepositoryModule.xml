@@ -3,7 +3,6 @@
                         xmlns:js="js.core" xmlns:ui="js.ui" xmlns:conf="js.conf">
 
     <js:Router>
-        <conf:RouteConfiguration route="^user/([^/]+)/([^/]+)$" onexec="defaultRoute"/>
         <conf:RouteConfiguration route="^user/([^/]+)/([^/]+)/.*$" onexec="showRepository" />
     </js:Router>
 

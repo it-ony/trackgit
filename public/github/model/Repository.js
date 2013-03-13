@@ -1,4 +1,4 @@
-define(["js/data/Model", "js/data/Collection", "github/model/Issue", "github/model/User"], function(Model, Collection, Issue, User) {
+define(["js/data/Model", "js/data/Collection", "github/model/Issue", "github/model/User", "github/model/MileStone"], function(Model, Collection, Issue, User, MileStone) {
     return Model.inherit("github.model.Repository", {
 
         schema: {
@@ -14,7 +14,8 @@ define(["js/data/Model", "js/data/Collection", "github/model/Issue", "github/mod
 
             has_issues: Boolean,
             open_issues: Number,
-            issues: Collection.of(Issue)
+            issues: Collection.of(Issue),
+            mileStones: Collection.of(MileStone)
         },
 
         idField: "name"

@@ -5,10 +5,14 @@ define(["js/data/Model", "js/data/Collection", "github/model/Label"], function(M
             title: String,
             number: Number,
 
-            labels: Collection.of(Label)
+            labels: Collection.of(Label),
+
+            open_issues: Number,
+            closed_issues: Number
 
         },
 
         idField: "number"
+
     });
 });

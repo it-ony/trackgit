@@ -24,13 +24,13 @@
                         </p>
                         <ui:MenuButton label="{i18n.t('navigation.repositories')}" class="pull-right filter-button">
                             <div>
-                                <ui:ItemsView class="filter-menu"
-                                              items="{me.repositories}" itemKey="repository"
-                                              multiSelect="false" tagName="ul">
+                                <ui:ListView class="filter-menu"
+                                             items="{me.repositories}" itemKey="repository"
+                                             multiSelect="false" tagName="ul">
                                     <a href="#/{me.login}/{repository.name}">
                                         <span>{repository.name}</span>
                                     </a>
-                                </ui:ItemsView>
+                                </ui:ListView>
                             </div>
                         </ui:MenuButton>
                     </div>

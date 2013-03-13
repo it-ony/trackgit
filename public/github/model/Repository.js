@@ -14,7 +14,7 @@ define(["js/data/Model"], function(Model) {
             open_issues: Number
         },
 
-        idKey: "name"
+        idField: "name"
 
     });
 });

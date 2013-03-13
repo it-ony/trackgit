@@ -13,7 +13,7 @@ define(["js/data/Model", "js/data/Collection", "github/model/Repository"], funct
             }
         },
 
-        idKey: "login"
+        idField: "login"
 
     });
 });

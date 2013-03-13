@@ -1,6 +1,6 @@
 define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flow"], function (ModuleBase, User, DataSource, flow) {
 
-    return ModuleBase.inherit("app.module.OverviewClass", {
+    return ModuleBase.inherit("app.module.UserModuleClass", {
 
         defaults: {
             user: null,

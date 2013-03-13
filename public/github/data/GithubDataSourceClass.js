@@ -73,6 +73,24 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
             return this.callBase();
         },
 
+        _resourcePathToUri: function(resourcePath, resource) {
+
+            if (resource.constructor.name === "github.model.Repository" &&
+                resourcePath[1] === "users") {
+
+                // github api is inconsistent at this point
+                // fetching the list of repositories via /user/{login}/repos
+                // but fetching the repository via /repos/{repositoryName}
+
+                resourcePath[1] = "repos";
+
+                // remove the context
+                resourcePath.splice(3, 1);
+            }
+
+            return this.callBase(resourcePath);
+        },
+
         getPathComponentsForModel: function (model) {
             var ret = this.callBase();
 

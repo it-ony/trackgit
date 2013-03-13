@@ -75,20 +75,19 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
 
         _resourcePathToUri: function(resourcePath, resource) {
 
-            if (resource.constructor.name === "github.model.Repository" &&
-                resourcePath[1] === "users") {
+            var r = /users\/([^/]+)\/repos\/([^/]+)/;
+            var path = this.callBase(resourcePath);
 
+            if (r.test(path)) {
                 // github api is inconsistent at this point
                 // fetching the list of repositories via /user/{login}/repos
                 // but fetching the repository via /repos/{repositoryName}
 
-                resourcePath[1] = "repos";
-
-                // remove the context
-                resourcePath.splice(3, 1);
+                path = path.replace(r, "repos/$1/$2");
             }
 
-            return this.callBase(resourcePath);
+            return path;
+
         },
 
         getPathComponentsForModel: function (model) {

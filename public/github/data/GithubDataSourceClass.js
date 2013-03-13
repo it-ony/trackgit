@@ -37,37 +37,37 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
 
         defaults: {
             accessToken: null,
-            determinateContextAttribute: false
+            determinateContextAttribute: false,
         },
 
         $defaultProcessorFactory: Processor,
 
-        getQueryParameters: function() {
+        getQueryParameters: function () {
             var params = this.callBase() || {};
             params["access_token"] = this.$.accessToken;
             return params;
         },
 
-        _getPagingParameterForCollectionPage: function(collectionPage){
+        _getPagingParameterForCollectionPage: function (collectionPage) {
             return {
                 page: collectionPage.$pageIndex + 1,
                 per_page: collectionPage.$limit
             }
         },
 
-        _buildUriForResource: function(resource){
+        _buildUriForResource: function (resource) {
             if (resource.$.url) {
                 var url = resource.$.url;
 
                 url = url.substr(this.$.endPoint.length + 1);
 
-                if(resource instanceof Collection){
-                   url = url.replace(/\{[^}]+\}/,"");
-                } else if(resource instanceof Model){
-                   url = url.replace("{/" + resource.idKey + "}","/"+resource.identifier());
+                if (resource instanceof Collection) {
+                    url = url.replace(/\{[^}]+\}/, "");
+                } else if (resource instanceof Model) {
+                    url = url.replace("{/" + resource.idKey + "}", "/" + resource.identifier());
                 }
 
-                return [this.$.gateway,url].join("/");
+                return [this.$.gateway, url].join("/");
             }
 
             return this.callBase();
@@ -82,8 +82,34 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
 
             return ret;
         },
-        extractListData: function (list, payload, options) {
+
+        extractListData: function (collectionPage, payload, options, xhr) {
             return payload;
+        },
+
+        extractListMetaData: function (collectionPage, payload, options, xhr) {
+            var link = xhr.getResponseHeader("Link");
+
+            if (link) {
+                var match = /page=(\d+)&per_page=(\d+)>;\s?rel="last"/.exec(link);
+                if (match) {
+                    var lastPage = parseInt(match[1]);
+                    var itemsPerPage = parseInt(match[2]);
+
+                    if (!isNaN(lastPage) && !isNaN(itemsPerPage)) {
+
+                        return {
+                            count: lastPage * itemsPerPage
+                        };
+                    }
+                }
+
+            } else {
+                return {
+                    count: payload.length
+                };
+            }
+
         }
     });
 

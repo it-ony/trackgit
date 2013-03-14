@@ -70,7 +70,9 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                         cb = null;
                     }
 
-                    this.vars.repository.$.mileStones.fetch(null, cb);
+//                    this.vars.repository.$.mileStones.fetch(null, cb);
+                    this.vars.repository.$.openMileStones.fetch(null, cb);
+                    this.vars.repository.$.closedMileStones.fetch(null, cb);
                 })
                 .exec(function(err) {
                     err && console.error(err);

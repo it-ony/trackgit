@@ -1,10 +1,15 @@
-define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flow"], function (ModuleBase, User, DataSource, flow) {
+define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flow", "js/data/Query", "js/core/List"], function (ModuleBase, User, DataSource, flow, Query, List) {
+
 
     return ModuleBase.inherit("app.module.RepositoryModuleClass", {
 
         defaults: {
             user: null,
-            repository: null
+            repository: null,
+            openMilestones: null,
+            closedMilestones: null,
+            openIssues: null,
+            queryList: List
         },
 
         inject: {
@@ -17,10 +22,14 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                 repository: null
             });
 
+            this.$.queryList.reset([
+                new Query().eql("state", "open")
+            ]);
+
             this.callBase();
         },
 
-        _getMileStones: function(state) {
+        _getMilestones: function (state) {
             state = state || "open";
 
             var ret = [],
@@ -38,24 +47,42 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
         },
 
-        openMileStones: function() {
-            return this._getMileStones("open");
-        }.on(["repository.mileStones", "*"]),
+        openIssues: function () {
+            if (this.$.openIssues) {
+                return (new List(this.$.openIssues.toArray())).query(new Query().eql("label",33));
+            }
+            return null;
+        }.onChange('openIssues'),
 
-        showRepository: function(routerContext, userName, repositoryName) {
+        closedIssues: function () {
+            if (this.$.repository && this.$.repository.$.issues) {
+                return this.$.repository.$.issues.query(new Query().eql("state", "closed"));
+            }
+            return null;
+        }.on(['repository', 'change:issues']),
+
+        bugIssues: function () {
+            if (this.$.repository && this.$.repository.$.issues) {
+                return this.$.repository.$.issues.query(new Query().in("labels", ["Bug"]));
+            }
+            return null;
+        }.on(['repository', 'change:issues']),
+
+
+        showRepository: function (routerContext, userName, repositoryName) {
 
             var self = this,
                 dataSource = this.$.dataSource,
                 runsInBrowser = this.runsInBrowser();
 
             flow()
-                .seq("user", function(cb) {
+                .seq("user", function (cb) {
                     var user = dataSource.createEntity(User, userName);
                     self.set("user", user);
 
                     user.fetch(null, cb);
                 })
-                .seq("repository", function(cb) {
+                .seq("repository", function (cb) {
                     var user = this.vars.user,
                         repository = user.$.repositories.createItem(repositoryName);
 
@@ -63,21 +90,39 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
                     repository.fetch(null, cb);
                 })
-                .seq("milestones", function(cb) {
+                .par(function (cb) {
 
                     if (runsInBrowser) {
                         cb();
                         cb = null;
                     }
 
-//                    this.vars.repository.$.mileStones.fetch(null, cb);
-                    this.vars.repository.$.openMileStones.fetch(null, cb);
-                    this.vars.repository.$.closedMileStones.fetch(null, cb);
+                    self.set('openMilestones', this.vars.repository.$.milestones.query(Query.query().eql("state", "open")));
+
+                    self.$.openMilestones.fetch(null, cb);
+                },
+                function (cb) {
+                    self.$.repository.$.labels.fetch(null, cb);
+                },
+                function (cb) {
+                    self.$.repository.$.issues.query(new Query().eql("state", "open")).fetch(null, function (err, collection) {
+                        self.set('openIssues', collection);
+                    });
                 })
-                .exec(function(err) {
+                .exec(function (err) {
                     err && console.error(err);
                     routerContext.callback(err);
                 });
+        },
+
+        showClosed: function () {
+            var closedMilestones = this.$.repository.$.milestones.query(Query.query().eql("state", "closed"));
+            var self = this;
+            closedMilestones.fetch(null, function (err) {
+                if (!err) {
+                    self.set('closedMilestones', closedMilestones);
+                }
+            });
         }
 
     });

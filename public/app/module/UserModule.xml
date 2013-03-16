@@ -11,10 +11,14 @@
     <js:Content name="main">
         <div class="container">
             <div class="row">
-                <div class="span9">
+                <div class="span3"/>
+                <div class="span4">
                     <h3>Repositories</h3>
-                    <ui:ListView items="{user.repositories}" itemKey="repo" tagName="ul">
-                        <a href="#/user/{user.login}/{repo.name}">{repo.name}</a>
+                    <ui:ListView items="{user.repositories}" itemKey="repo" tagName="ul" class="nav nav-list repos">
+                        <a href="#/user/{user.login}/{repo.name}">
+                            <span class="label label-info pull-right" visible="{repo.open_issues}">{repo.open_issues}</span>
+                            {repo.name}
+                        </a>
                     </ui:ListView>
                 </div>
                 <div class="span3">

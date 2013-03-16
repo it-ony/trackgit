@@ -1,4 +1,6 @@
-define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "underscore", "js/data/Collection"], function (RestDataSource, DataSource, Model, _, Collection) {
+define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "underscore", "js/data/Collection", "js/data/Query"], function (RestDataSource, DataSource, Model, _, Collection, Query) {
+
+    var undefined;
 
     var Processor = DataSource.Processor.inherit("github.data.GitHubDataSourceClass.Processor", {
 
@@ -32,12 +34,65 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
         }
 
     });
+    var QueryComposer = {
+
+        compose: function (query) {
+
+            var hash = query.query;
+
+            return this.translateOperator(hash.where);
+        },
+
+        translateSort: function (sort) {
+            var ret = [];
+            for (var i = 0; i < sort.length; i++) {
+                ret.push((sort[i].direction === 1 ? "+" : "-") + sort[i].field);
+            }
+            return ret.join(",");
+        },
+
+        translateOperator: function (operator, depth) {
+            depth = depth === undefined ? 0 : depth;
+            var ret = {};
+            var name = operator.operator;
+            if (operator instanceof Query.Where) {
+                var expressions = this.translateExpressions(operator.expressions, depth + 1);
+                for(var i = 0; i < expressions.length; i++){
+                    if(expressions[i]){
+                        ret[expressions[i].field] = expressions[i].value;
+                    }
+                }
+                return ret;
+            } else if (operator instanceof Query.Comparator) {
+                var value = operator.getValue();
+                if(value instanceof Array){
+                    ret.value = value.join(",");
+                } else if(name === "eql"){
+                    ret.value = value;
+                }
+                ret.field = operator.field;
+
+                return ret;
+            } else {
+                return null;
+            }
+        },
+
+        translateExpressions: function (expressions, depth) {
+            var ret = [];
+            for (var i = 0; i < expressions.length; i++) {
+                ret.push(this.translateOperator(expressions[i], depth));
+            }
+            return ret;
+        }
+
+    };
 
     var GithubDataSourceClass = RestDataSource.inherit("github.data.GithubDataSourceClass", {
 
         defaults: {
             accessToken: null,
-            determinateContextAttribute: false,
+            determinateContextAttribute: false
         },
 
         $defaultProcessorFactory: Processor,
@@ -87,7 +142,6 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
             }
 
             return path;
-
         },
 
         getPathComponentsForModel: function (model) {
@@ -127,6 +181,11 @@ define(["js/data/RestDataSource", "js/data/DataSource", "js/data/Model", "unders
                 };
             }
 
+            return null;
+        },
+
+        getQueryComposer: function () {
+            return QueryComposer;
         }
     });
 

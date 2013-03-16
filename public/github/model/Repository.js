@@ -1,4 +1,4 @@
-define(["js/data/Model", "js/data/Collection", "github/model/Issue", "github/model/User", "github/model/MileStone", "js/data/Query"], function (Model, Collection, Issue, User, MileStone, Query) {
+define(["js/data/Model", "js/data/Collection", "github/model/Issue", "github/model/User", "github/model/Milestone", "js/data/Query", "github/model/Label"], function (Model, Collection, Issue, User, Milestone, Query, Label) {
     return Model.inherit("github.model.Repository", {
 
         schema: {
@@ -6,7 +6,7 @@ define(["js/data/Model", "js/data/Collection", "github/model/Issue", "github/mod
             description: String,
             full_name: String,
 
-//            owner: "github.model.User",
+            owner: "github.model.User",
 
             "private": Boolean,
             fork: Boolean,
@@ -15,23 +15,24 @@ define(["js/data/Model", "js/data/Collection", "github/model/Issue", "github/mod
             has_issues: Boolean,
             open_issues: Number,
             issues: Collection.of(Issue),
-            mileStones: Collection.of(MileStone)
+            milestones: Collection.of(Milestone),
+            labels: Collection.of(Label)
         },
 
         defaults: {
-            openMileStones: null,
-            closedMileStones: null
+            openMilestones: null,
+            closedMilestones: null
         },
 
-        _commitMileStones: function (mileStones) {
+        _commitMilestones: function (milestones) {
 
-            if (!mileStones) {
+            if (!milestones) {
                 return;
             }
 
             this.set({
-                openMileStones: mileStones.query(Query.query().eql("status", "open")),
-                closedMileStones: mileStones.query(Query.query().eql("status", "closed"))
+                openMilestones: milestones.query(Query.query().eql("status", "open")),
+                closedMilestones: milestones.query(Query.query().eql("status", "closed"))
             });
         },
 

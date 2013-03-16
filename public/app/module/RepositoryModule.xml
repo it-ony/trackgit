@@ -22,7 +22,7 @@
                         <div class="avatar">
                             <img src="{user.avatar_url}&amp;s=25" alt="{user.name}"/>
                         </div>
-                        <a href="#/user/{me.login}" class="user">{user.name}</a>
+                        <a href="#/user/{user.login}" class="user">{user.name}</a>
                     </div>
 
                     <h3>Milestones</h3>
@@ -31,7 +31,7 @@
                             Backlog
                         </li>
                         <li class="open-milestones">
-                            <ui:ListView items="{openMileStones()}" itemKey="milestone">
+                            <ui:ListView items="{openMilestones}" itemKey="milestone">
                                 <js:Template name="item">
                                     <a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">
                                         {milestone.title}
@@ -40,15 +40,26 @@
                             </ui:ListView>
                         </li>
                         <li class="closed-milestones">
-                            <!--<ui:ListView items="{closedMileStones}" itemKey="milestone">-->
-                                <!--<a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">-->
-                                    <!--{milestone.title}-->
-                                <!--</a>-->
-                            <!--</ui:ListView>-->
+                            <a onclick="showClosed" visible="{not(closedMilestones)}">Show closed</a>
+                            <ui:ListView items="{closedMilestones}" itemKey="milestone" visible="{closedMilestones}">
+                                <a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">
+                                    {milestone.title}
+                                </a>
+                            </ui:ListView>
                         </li>
                     </ul>
                 </div>
-                <div class="span6">
+                <div class="span3">
+                    <ui:ListView items="{openIssues()}" itemKey="issue">
+                        <div>
+                            <a href="/user/{user.login}/{repository.name}/issue/{issue.number}">
+                                #{issue.number}
+                                <span>{issue.title}</span>
+                            </a>
+                        </div>
+                    </ui:ListView>
+                </div>
+                <div class="span3">
 
                 </div>
                 <div class="span3">

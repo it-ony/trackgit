@@ -4,7 +4,13 @@ define(["js/data/Model","github/model/User"], function(Model, User){
         schema: {
             assignee: "github.model.User"
         },
-        idField: "number"
+        idField: "number",
+
+        labelNames: function () {
+            return this.$.labels ? _.map(this.$.labels, function (el) {
+                return el.name;
+            }) : [];
+        }
     });
 
 });

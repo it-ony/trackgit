@@ -31,8 +31,8 @@ define(["js/data/Model", "js/data/Collection", "github/model/Issue", "github/mod
             }
 
             this.set({
-                openMilestones: milestones.query(Query.query().eql("status", "open")),
-                closedMilestones: milestones.query(Query.query().eql("status", "closed"))
+                openMilestones: milestones.query(Query.query().eql("state", "open")),
+                closedMilestones: milestones.query(Query.query().eql("state", "closed"))
             });
         },
 

@@ -32,3 +32,148 @@ body {
     padding: 8px 14px;
     border: 1px solid #E5E5E5;
 }
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
+.navbar {
+    z-index: 0;
+}
+
+.navbar-inner {
+    height: 100px;
+}
+
+#sidebar {
+    position: absolute;
+    left: 0;
+    width: 200px;
+    top: 75px;
+    bottom: 0;
+    background: #474747;
+    color: white;
+}
+
+#sidebar h3 {
+    margin: 10px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #999999;
+    line-height: 1em;
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px;
+    margin-left: 20px;
+}
+
+#sidebar ul ul {
+    margin: 0;
+}
+
+#sidebar a {
+    color: white;
+}
+
+#sidebar .show-closed {
+    font-size: 0.8em;
+}
+
+#content {
+    background: #EEEEEE;
+    position: absolute;
+    left: 200px;
+    top: 40px;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    overflow: hidden;
+    border-top-left-radius: 10px;
+    padding: 10px;
+}
+
+.content-header .btn-group {
+    float-right;
+}
+
+#content h1 {
+    font-size: 20px;
+    line-height: 1.5em;
+    margin-bottom: 5px;
+}
+
+.repository-information {
+    padding: 5px;
+    padding-left: 75px;
+}
+
+.repository-information span {
+    font-size: 16px;
+}
+
+.repository-information img {
+    border: 1px solid white;
+    left: 10px;
+    margin-right: 10px;
+    position: absolute;
+    top: -25px;
+    border-radius: 3px;
+}
+
+#board {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #252525;
+    overflow: auto;
+    background: #474747;
+    position: absolute;
+    top: 60px;
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+}
+
+#board ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#board > ul {
+    display: table-row;
+}
+
+#board .column {
+    display: table-cell;
+    min-width: 250px;
+    width: 250px;
+    padding: 5px;
+}
+
+#board .column > div {
+    padding: 5px;
+    background: #DDDDDD;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#board h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    line-height: 1em;
+}
+
+#board .issue {
+    background: white;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 2px;
+    border: 1px solid #999999;
+}

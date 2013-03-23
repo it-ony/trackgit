@@ -1,0 +1,32 @@
+<view:SidebarClass xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="js.ui" xmlns:view="app.view">
+
+    <div class="repository-information">
+        <div class="avatar">
+            <img src="{user.avatar_url}&amp;s=25" alt="{user.name}"/>
+        </div>
+        <a href="#/user/{user.login}" class="user">{user.name}</a>
+    </div>
+
+    <h3>Milestones</h3>
+    <ul>
+        <li class="backlog">
+            <a href="user/{user.login}/{repository.name}">Backlog</a>
+        </li>
+        <li class="open-milestones milestones">
+            <ui:ListView items="{repository.openMilestones}" itemKey="milestone">
+                <a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">
+                    {milestone.title}
+                </a>
+            </ui:ListView>
+        </li>
+        <li class="closed-milestones milestones">
+            <a onclick="showClosed">Show closed</a>
+            <ui:ListView items="{repository.closedMilestones}" itemKey="milestone" >
+                <a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">
+                    {milestone.title}
+                </a>
+            </ui:ListView>
+        </li>
+    </ul>
+
+</view:SidebarClass>

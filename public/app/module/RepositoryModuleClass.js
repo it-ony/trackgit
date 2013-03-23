@@ -7,9 +7,6 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
             repository: null,
             milestone: null,
 
-            openMilestones: null,
-            closedMilestones: null,
-
             openIssues: null,
             closedIssues: null,
 
@@ -49,28 +46,6 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
             return ret;
 
         },
-
-//        openIssues: function () {
-//            if (this.$.openIssues) {
-//                return (new List(this.$.openIssues.toArray())).query(new Query().eql("label", 33));
-//            }
-//            return null;
-//        }.onChange('openIssues'),
-//
-//        closedIssues: function () {
-//            if (this.$.repository && this.$.repository.$.issues) {
-//                return this.$.repository.$.issues.query(new Query().eql("state", "closed"));
-//            }
-//            return null;
-//        }.on(['repository', 'change:issues']),
-//
-//        bugIssues: function () {
-//            if (this.$.repository && this.$.repository.$.issues) {
-//                return this.$.repository.$.issues.query(new Query().in("labels", ["Bug"]));
-//            }
-//            return null;
-//        }.on(['repository', 'change:issues']),
-
 
         title: function () {
             var title = "Issues for " + this.get("user.login") + "/" + this.get("repository.name"),
@@ -164,14 +139,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
                     self.$.columns.reset(columns);
                 }, function (cb) {
-
-                    if (runsInBrowser) {
-                        cb();
-                        cb = null;
-                    }
-
-                    self.set('openMilestones', this.vars.repository.$.milestones.query(Query.query().eql("state", "open")));
-                    self.$.openMilestones.fetch(null, cb);
+                    this.vars.repository.$.openMilestones.fetch(null, cb);
                 })
                 .exec(function (err) {
                     err && console.error(err);
@@ -229,17 +197,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
         issues: function(column) {
             var source = this.$[column.source];
             return column.query.filterItems(source.$items);
-        }.onChange("milestone"),
-
-        showClosed: function () {
-            var closedMilestones = this.$.repository.$.milestones.query(Query.query().eql("state", "closed"));
-            var self = this;
-            closedMilestones.fetch(null, function (err) {
-                if (!err) {
-                    self.set('closedMilestones', closedMilestones);
-                }
-            });
-        }
+        }.onChange("milestone")
 
     });
 });

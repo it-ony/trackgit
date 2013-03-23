@@ -1,4 +1,4 @@
-define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flow", "js/data/Query", "js/core/List"], function (ModuleBase, User, DataSource, flow, Query, List) {
+define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flow", "js/data/Query", "js/core/List", "js/data/QueryList"], function (ModuleBase, User, DataSource, flow, Query, List, QueryList) {
 
     return ModuleBase.inherit("app.module.RepositoryModuleClass", {
 
@@ -119,7 +119,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                         query: new Query()
                             .eql("state", "open")
                             .not(function (where) {
-                                where.in("labels", statusLabelNames)
+                                where.in("labelNames()", statusLabelNames)
                             })
                     });
 
@@ -130,7 +130,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                             source: "openIssues",
                             query: new Query()
                                 .eql("state", "open")
-                                .in("labels", [statusLabel.$.name])
+                                .in("labelNames()", [statusLabel.$.name])
                         });
                     }
 
@@ -200,7 +200,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
         issues: function(column) {
             var source = this.$[column.source];
-            return column.query.filterItems(source.$items);
+            return new QueryList({query: column.query, list: source});
         }.onChange("milestone")
 
     });

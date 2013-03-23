@@ -87,8 +87,6 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
         showRepository: function (routeContext, userName, repositoryName) {
 
-            console.log("show repository");
-
             var self = this,
                 dataSource = this.$.dataSource,
                 runsInBrowser = this.runsInBrowser(),
@@ -138,6 +136,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
                     columns.push({
                         title: "open",
+                        source: "openIssues",
                         query: new Query()
                             .eql("state", "open")
                             .not(function (where) {
@@ -149,6 +148,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                         var statusLabel = statusLabels[i];
                         columns.push({
                             title: statusLabel.name(),
+                            source: "openIssues",
                             query: new Query()
                                 .eql("state", "open")
                                 .in("labels", [statusLabel.$.name])
@@ -157,6 +157,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
                     columns.push({
                         title: "closed",
+                        source: "closedIssues",
                         query: new Query()
                             .eql("state", "closed")
                     });
@@ -173,7 +174,6 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                     self.$.openMilestones.fetch(null, cb);
                 })
                 .exec(function (err) {
-                    console.log("show repository completed");
                     err && console.error(err);
                     routeContext.callback(err);
                 });
@@ -183,29 +183,53 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
             var self = this;
 
-            console.log("load milestone");
-
             flow()
                 .seq("milestone", function (cb) {
                     if (milestoneId) {
                         var milestone = self.$.repository.$.milestones.createItem(milestoneId);
                         milestone.fetch(null, function (err) {
                             var m = err ? null : milestone;
-                            self.set("milestone", m);
                             cb(null, m);
                         });
                     } else {
-                        self.set("milestone", null);
-                        cb();
+                        cb(null, null);
                     }
                 })
-                .exec(function(err) {
+                .par({
+                    openIssues: function(cb) {
+                        var issues = self.$.repository.$.issues.query(
+                            Query.query()
+                                .eql("state", "open")
+                                .eql("milestone", milestoneId ? milestoneId : "none")
+                        );
+
+                        issues.fetch(null, cb);
+                    },
+                    closedIssues: function(cb) {
+
+                        var issues = self.$.repository.$.issues.query(
+                            Query.query()
+                                .eql("state", "closed")
+                                .eql("milestone", milestoneId ? milestoneId : "none")
+                        );
+
+                        issues.fetch(null, cb);
+                    }
+                })
+                .exec(function(err, results) {
+                    self.set(results);
+
                     console.log("load milestone completed");
                     err && console.error(err);
                     routeContext.callback(err)
                 });
 
         }.async(),
+
+        issues: function(column) {
+            var source = this.$[column.source];
+            return column.query.filterItems(source.$items);
+        }.onChange("milestone"),
 
         showClosed: function () {
             var closedMilestones = this.$.repository.$.milestones.query(Query.query().eql("state", "closed"));

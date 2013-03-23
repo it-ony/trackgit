@@ -1,6 +1,6 @@
 <module:RepositoryModuleClass xmlns="http://www.w3.org/1999/xhtml"
                               xmlns:module="app.module"
-                              xmlns:js="js.core" xmlns:ui="js.ui" xmlns:conf="js.conf">
+                              xmlns:js="js.core" xmlns:ui="js.ui" xmlns:conf="js.conf" xmlns:data="js.data">
 
     <js:Router>
         <conf:RouteConfiguration route="^user/([^/]+)/([^/]+)(?:/milestone/(\d+))?.*$" onexec="showRepository"/>
@@ -56,9 +56,9 @@
                 <div class="span9">
                     <ui:ListView items="{columns}" itemKey="column">
                         <h3>{column.title}</h3>
-                        <ul>
-
-                        </ul>
+                        <ui:ListView items="{issues(column)}" itemKey="issue">
+                            {issue.title}
+                        </ui:ListView>
                     </ui:ListView>
                 </div>
             </div>

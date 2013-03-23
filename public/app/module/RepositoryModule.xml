@@ -19,21 +19,35 @@
 
     <js:Content name="main">
 
-        <view:Sidebar user="{user}" repository="{repository}" />
+        <view:Sidebar id="sidebar" user="{user}" repository="{repository}" />
 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="span3">
+        <div id="content">
+            <div class="content-header">
+                <h1>{repository.name} - {milestoneName()}</h1>
+                <div class="btn-group">
+                    Some action buttons here
+                </div>
+            </div>
+            <div id="board">
+                <ui:ItemsView items="{columns}" itemKey="column" tagName="ul">
+                    <js:Template name="item">
+                        <li class="column">
+                            <div>
+                                <h3>{column.title}</h3>
+                                <ui:ItemsView items="{issues(column)}" itemKey="issue" tagName="ul">
+                                    <js:Template name="item">
+                                        <li class="issue">
+                                            <div>{issue.title}</div>
+                                        </li>
+                                    </js:Template>
+                                </ui:ItemsView>
+                            </div>
 
-                </div>
-                <div class="span9">
-                    <ui:ListView items="{columns}" itemKey="column">
-                        <h3>{column.title}</h3>
-                        <ui:ListView items="{issues(column)}" itemKey="issue">
-                            {issue.title}
-                        </ui:ListView>
-                    </ui:ListView>
-                </div>
+                        </li>
+
+                    </js:Template>
+
+                </ui:ItemsView>
             </div>
         </div>
 

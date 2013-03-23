@@ -60,6 +60,10 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
             return title
         }.onChange("milestone", "user", "repository"),
 
+        milestoneName: function() {
+            return this.$.milestone ? this.$.milestone.$.title : "Backlog"
+        }.onChange("milestone"),
+
         showRepository: function (routeContext, userName, repositoryName) {
 
             var self = this,

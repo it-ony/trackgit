@@ -1,17 +1,18 @@
 <module:RepositoryModuleClass xmlns="http://www.w3.org/1999/xhtml"
-                        xmlns:module="app.module"
-                        xmlns:js="js.core" xmlns:ui="js.ui" xmlns:conf="js.conf">
+                              xmlns:module="app.module"
+                              xmlns:js="js.core" xmlns:ui="js.ui" xmlns:conf="js.conf">
 
     <js:Router>
-        <conf:RouteConfiguration route="^user/([^/]+)/([^/]+).*$" onexec="showRepository" />
+        <conf:RouteConfiguration route="^user/([^/]+)/([^/]+)(?:/milestone/(\d+))?.*$" onexec="showRepository"/>
     </js:Router>
 
+    <js:Head title="{title()}" author="{user.name}"/>
+
     <js:Content name="header">
-        <div>
-            <h2>
-                <span class="user">{user.login}</span>/<span class="repository">{repository.name}</span>
-            </h2>
-        </div>
+        <p class="repository">
+            <span class="user">{user.login}</span>/
+            <span class="repository">{repository.name}</span>
+        </p>
     </js:Content>
 
     <js:Content name="main">
@@ -27,10 +28,10 @@
 
                     <h3>Milestones</h3>
                     <ul>
-                        <li>
-                            Backlog
+                        <li class="backlog">
+                            <a href="user/{user.login}/{repository.name}">Backlog</a>
                         </li>
-                        <li class="open-milestones">
+                        <li class="open-milestones milestones">
                             <ui:ListView items="{openMilestones}" itemKey="milestone">
                                 <js:Template name="item">
                                     <a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">
@@ -39,8 +40,10 @@
                                 </js:Template>
                             </ui:ListView>
                         </li>
-                        <li class="closed-milestones">
-                            <a onclick="showClosed" visible="{not(closedMilestones)}">Show closed</a>
+                        <li class="closed-milestones milestones">
+                            <a onclick="showClosed" visible="{not(closedMilestones)}">Show
+                                closed
+                            </a>
                             <ui:ListView items="{closedMilestones}" itemKey="milestone" visible="{closedMilestones}">
                                 <a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">
                                     {milestone.title}

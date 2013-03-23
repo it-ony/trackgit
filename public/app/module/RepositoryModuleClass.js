@@ -9,11 +9,14 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
             openMilestones: null,
             closedMilestones: null,
+
             openIssues: null,
-            queryList: List,
+            closedIssues: null,
 
             statusLabels: List,
-            labels: List
+            labels: List,
+
+            columns: List
         },
 
         inject: {
@@ -47,26 +50,26 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
         },
 
-        openIssues: function () {
-            if (this.$.openIssues) {
-                return (new List(this.$.openIssues.toArray())).query(new Query().eql("label", 33));
-            }
-            return null;
-        }.onChange('openIssues'),
-
-        closedIssues: function () {
-            if (this.$.repository && this.$.repository.$.issues) {
-                return this.$.repository.$.issues.query(new Query().eql("state", "closed"));
-            }
-            return null;
-        }.on(['repository', 'change:issues']),
-
-        bugIssues: function () {
-            if (this.$.repository && this.$.repository.$.issues) {
-                return this.$.repository.$.issues.query(new Query().in("labels", ["Bug"]));
-            }
-            return null;
-        }.on(['repository', 'change:issues']),
+//        openIssues: function () {
+//            if (this.$.openIssues) {
+//                return (new List(this.$.openIssues.toArray())).query(new Query().eql("label", 33));
+//            }
+//            return null;
+//        }.onChange('openIssues'),
+//
+//        closedIssues: function () {
+//            if (this.$.repository && this.$.repository.$.issues) {
+//                return this.$.repository.$.issues.query(new Query().eql("state", "closed"));
+//            }
+//            return null;
+//        }.on(['repository', 'change:issues']),
+//
+//        bugIssues: function () {
+//            if (this.$.repository && this.$.repository.$.issues) {
+//                return this.$.repository.$.issues.query(new Query().in("labels", ["Bug"]));
+//            }
+//            return null;
+//        }.on(['repository', 'change:issues']),
 
 
         title: function () {
@@ -75,12 +78,16 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
             if (milestone) {
                 title += " - " + milestone.$.title;
+            } else {
+                title += " - Backlog"
             }
 
             return title
         }.onChange("milestone", "user", "repository"),
 
-        showRepository: function (routerContext, userName, repositoryName, milestoneId) {
+        showRepository: function (routeContext, userName, repositoryName) {
+
+            console.log("show repository");
 
             var self = this,
                 dataSource = this.$.dataSource,
@@ -102,32 +109,17 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
                     repository.fetch(null, cb);
                 })
-                .par({
-                    milestone: function (cb) {
-                        if (milestoneId) {
-                            var milestone = this.vars.repository.$.milestones.createItem(milestoneId);
-                            milestone.fetch(null, function (err) {
-                                var m = err ? null : milestone;
-                                self.set("milestone", m);
-                                cb(null, m);
-                            });
-                        } else {
-                            self.set("milestone", null);
-                            cb();
-                        }
-                    },
-                    labels: function(cb) {
-                        this.vars.repository.$.labels.fetch(null, cb);
-                    }
+                .seq("labels", function (cb) {
+                    this.vars.repository.$.labels.fetch(null, cb);
                 })
-                .seq(function() {
+                .par(function () {
 
                     var labels = [],
                         statusLabels = [],
                         statusLabelNames = [],
                         columns = [];
 
-                    this.vars.labels.each(function(label) {
+                    this.vars.labels.each(function (label) {
                         var isStatusLabel = label.identifyStatus();
                         (isStatusLabel ? statusLabels : labels).push(label);
 
@@ -137,7 +129,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                     });
 
                     // sort the status labels
-                    statusLabels.sort(function(a, b) {
+                    statusLabels.sort(function (a, b) {
                         return (a.$.priority - b.$.priority);
                     });
 
@@ -148,7 +140,7 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                         title: "open",
                         query: new Query()
                             .eql("state", "open")
-                            .not(function(where) {
+                            .not(function (where) {
                                 where.in("labels", statusLabelNames)
                             })
                     });
@@ -169,10 +161,8 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
                             .eql("state", "closed")
                     });
 
-                    console.log(columns);
-
-                })
-                .par(function (cb) {
+                    self.$.columns.reset(columns);
+                }, function (cb) {
 
                     if (runsInBrowser) {
                         cb();
@@ -181,20 +171,41 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
                     self.set('openMilestones', this.vars.repository.$.milestones.query(Query.query().eql("state", "open")));
                     self.$.openMilestones.fetch(null, cb);
-                },
-                function (cb) {
-                    self.$.repository.$.labels.fetch(null, cb);
-                },
-                function (cb) {
-                    self.$.repository.$.issues.query(new Query().eql("state", "open")).fetch(null, function (err, collection) {
-                        self.set('openIssues', collection);
-                    });
                 })
                 .exec(function (err) {
+                    console.log("show repository completed");
                     err && console.error(err);
-                    routerContext.callback(err);
+                    routeContext.callback(err);
                 });
-        },
+        }.async(),
+
+        loadMilestone: function(routeContext, milestoneId) {
+
+            var self = this;
+
+            console.log("load milestone");
+
+            flow()
+                .seq("milestone", function (cb) {
+                    if (milestoneId) {
+                        var milestone = self.$.repository.$.milestones.createItem(milestoneId);
+                        milestone.fetch(null, function (err) {
+                            var m = err ? null : milestone;
+                            self.set("milestone", m);
+                            cb(null, m);
+                        });
+                    } else {
+                        self.set("milestone", null);
+                        cb();
+                    }
+                })
+                .exec(function(err) {
+                    console.log("load milestone completed");
+                    err && console.error(err);
+                    routeContext.callback(err)
+                });
+
+        }.async(),
 
         showClosed: function () {
             var closedMilestones = this.$.repository.$.milestones.query(Query.query().eql("state", "closed"));

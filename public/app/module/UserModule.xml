@@ -15,7 +15,7 @@
                 <div class="span4">
                     <h3>Repositories</h3>
                     <ui:ListView items="{user.repositories}" itemKey="repo" tagName="ul" class="nav nav-list repos">
-                        <a href="#/user/{user.login}/{repo.name}">
+                        <a href="user/{user.login}/{repo.name}">
                             <span class="label label-info pull-right" visible="{repo.open_issues}">{repo.open_issues}</span>
                             {repo.name}
                         </a>

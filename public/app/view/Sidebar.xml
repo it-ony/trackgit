@@ -2,9 +2,11 @@
 
     <div class="repository-information">
         <div class="avatar">
-            <img src="{user.avatar_url}&amp;s=25" alt="{user.name}"/>
+            <a href="user/{user.login}">
+                <img src="{user.avatar_url}&amp;s=50" alt="{user.name}"/>
+            </a>
         </div>
-        <a href="#/user/{user.login}" class="user">{user.name}</a>
+        <span>{repository.name}</span>
     </div>
 
     <h3>Milestones</h3>
@@ -20,7 +22,7 @@
             </ui:ListView>
         </li>
         <li class="closed-milestones milestones">
-            <a onclick="showClosed">Show closed</a>
+            <a onclick="showClosed" class="show-closed">Show closed milestones</a>
             <ui:ListView items="{repository.closedMilestones}" itemKey="milestone" >
                 <a href="/user/{user.login}/{repository.name}/milestone/{milestone.number}">
                     {milestone.title}

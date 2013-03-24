@@ -37,7 +37,12 @@
                                 <ui:ItemsView items="{issues(column)}" itemKey="issue" tagName="ul">
                                     <js:Template name="item">
                                         <li class="issue">
-                                            <div>{issue.title}</div>
+                                            <div class="number">{issue.number}</div>
+                                            <div class="title">{issue.title}</div>
+                                            <div class="type">{issue.type}</div>
+                                            <div class="assignee">
+                                                <img visible="{issue.assignee}" src="{issue.assignee.avatar_url}" />
+                                            </div>
                                         </li>
                                     </js:Template>
                                 </ui:ItemsView>

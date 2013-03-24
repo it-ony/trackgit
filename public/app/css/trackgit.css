@@ -182,3 +182,8 @@ body {
     border-radius: 2px;
     border: 1px solid #999999;
 }
+
+.window.wide {
+    width: 80%;
+    margin-left: -40%;
+}

@@ -25,7 +25,7 @@
             <div class="content-header">
                 <h1>{repository.name} - {milestoneName()}</h1>
                 <div class="btn-group">
-                    <ui:Button label="Create Issue"/>
+                    <ui:Button label="Create Issue" onpointer="createIssue" />
                 </div>
             </div>
             <div id="board">

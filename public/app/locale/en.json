@@ -1,5 +1,13 @@
 {
     "navigation": {
         "repositories": "Repositories"
+    },
+
+    "issue": {
+        "dialog": {
+            "title": "Create issue",
+            "titleField": "Title",
+            "descriptionField": "Description"
+        }
     }
 }

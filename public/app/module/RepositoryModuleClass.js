@@ -1,4 +1,4 @@
-define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flow", "js/data/Query", "js/core/List", "js/data/QueryList"], function (ModuleBase, User, DataSource, flow, Query, List, QueryList) {
+define(["require", "app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flow", "js/data/Query", "js/core/List", "js/data/QueryList"], function (require, ModuleBase, User, DataSource, flow, Query, List, QueryList) {
 
     return ModuleBase.inherit("app.module.RepositoryModuleClass", {
 
@@ -27,6 +27,16 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
             });
 
             this.callBase();
+        },
+
+        createIssue: function() {
+
+            var self = this;
+            this.createCachedWindow("xaml!app/window/CreateIssueDialog", null, function(err, dialog) {
+                if (!err) {
+                    dialog.showModal();
+                }
+            });
         },
 
         _getMilestones: function (state) {
@@ -68,7 +78,6 @@ define(["app/module/ModuleBase", "github/model/User", "js/data/DataSource", "flo
 
             var self = this,
                 dataSource = this.$.dataSource,
-                runsInBrowser = this.runsInBrowser(),
                 labels;
 
             flow()

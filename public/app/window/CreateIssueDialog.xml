@@ -1,0 +1,21 @@
+<window:CreateIssueDialogClass xmlns="http://www.w3.org/1999/xhtml"
+                               xmlns:js="js.core"
+                               xmlns:window="app.window" xmlns:ui="js.ui" xmlns:field="js.ui.field">
+
+    <js:Content name="body">
+        <div class="row-fluid">
+            <div class="span9">
+                <field:Text value="{issue.title}" placeholder="{i18n.t('issue.dialog.titleField')}"/>
+                <field:TextArea value="{issue.description}" placeholder="{i18n.t('issue.dialog.descriptionField')}"/>
+            </div>
+            <div class="span3">
+                Labels
+            </div>
+        </div>
+    </js:Content>
+
+    <js:Content name="footer">
+        <ui:Button onclick="confirmDialog" label="Submit issue" type="primary"/>
+    </js:Content>
+
+</window:CreateIssueDialogClass>
